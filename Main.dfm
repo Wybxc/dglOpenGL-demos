@@ -13,6 +13,9 @@ object Form1: TForm1
   OldCreateOrder = False
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  OnKeyDown = FormKeyDown
+  OnMouseWheelDown = FormMouseWheelDown
+  OnMouseWheelUp = FormMouseWheelUp
   OnResize = FormResize
   PixelsPerInch = 96
   TextHeight = 13
