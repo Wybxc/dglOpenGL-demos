@@ -29,7 +29,10 @@ implementation
 procedure TForm1.Display(Sender: TObject; var Done: Boolean);
 begin
   glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT); // 清屏
+
   SwapBuffers(DC); // 应用更改
+
+  Done := False;
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
@@ -40,8 +43,16 @@ begin
   RC := CreateRenderingContext(DC, [opDoubleBuffered], 32, 24, 0, 0, 0, 0); // 获得 RC
   ActivateRenderingContext(DC, RC); // 绑定 DC, RC
   (*********)
+  glShadeModel(GL_SMOOTH);  // 启用颜色平滑
+
   glClearColor(0, 0, 0, 0); // 设置背景颜色
+
+  glClearDepth(1.0);        // 设置深度缓存默认值
+  glDepthFunc(GL_LEQUAL);   // 设置深度比较模式
   glEnable(GL_DEPTH_TEST);  // 打开深度测试
+
+  glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // 告诉系统对透视进行最高质量修正
+
   glEnable(GL_CULL_FACE);   // 打开背面剔除
   (*********)
   Application.OnIdle := Display;
@@ -60,9 +71,11 @@ const
   FarClipping = 1000;
 begin
   glViewport(0, 0, ClientWidth, ClientHeight); // 设置视窗
+  (*********)
   glMatrixMode(GL_PROJECTION); // 更改投影矩阵
   glLoadIdentity; // 设置当前矩阵为单位阵
   gluPerspective(45.0, ClientWidth / ClientHeight, NearClipping, FarClipping); // 设置场景大小
+  (*********)
   glMatrixMode(GL_MODELVIEW); // 更改模型视图矩阵
   glLoadIdentity; // 设置当前矩阵为单位阵
 end;
