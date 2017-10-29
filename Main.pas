@@ -73,8 +73,6 @@ begin
 
   glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // 告诉系统对透视进行最高质量修正
 
-  glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // 告诉系统对透视进行最高质量修正
-
   glEnable(GL_CULL_FACE);   // 打开背面剔除
   (*********)
   Application.OnIdle := Display;
