@@ -13,9 +13,11 @@ type
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormMouseWheelUp(Sender: TObject; Shift: TShiftState; MousePos: TPoint; var Handled: Boolean);
     procedure FormMouseWheelDown(Sender: TObject; Shift: TShiftState; MousePos: TPoint; var Handled: Boolean);
+    procedure FormDblClick(Sender: TObject);
   private
     { Private declarations }
-    X, Y, Z: Integer;
+    X, Y, Z: Single;
+    procedure ShowTrans; inline;
   public
     { Public declarations }
     DC: HDC;
@@ -35,7 +37,7 @@ begin
   glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT); // 清屏
 
   glLoadIdentity;
-  glTranslatef(X / 10, Y / 10, Z / 10);
+  glTranslatef(X, Y, Z);
 
   glBegin(GL_QUADS);
   begin
@@ -76,8 +78,16 @@ begin
   (*********)
   X := 0;
   Y := 0;
-  Z := -100;
-  Caption := Format('X:%f, Y:%f, Z:%f', [X / 10, Y / 10, Z / 10]);
+  Z := -10;
+  ShowTrans;
+end;
+
+procedure TForm1.FormDblClick(Sender: TObject);
+begin
+  X := 0;
+  Y := 0;
+  Z := -10;
+  ShowTrans;
 end;
 
 procedure TForm1.FormDestroy(Sender: TObject);
@@ -91,27 +101,28 @@ procedure TForm1.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState)
 begin
   case Key of
     VK_LEFT:
-      Dec(X);
+      X := X - 0.1;
     VK_RIGHT:
-      Inc(X);
+      X := X + 0.1;
     VK_UP:
-      Inc(Y);
+      Y := Y + 0.1;
     VK_DOWN:
-      Dec(Y);
+      Y := Y - 0.1;
   end;
-  Caption := Format('X:%f, Y:%f, Z:%f', [X / 10, Y / 10, Z / 10]);
+  ShowTrans;
 end;
 
 procedure TForm1.FormMouseWheelDown(Sender: TObject; Shift: TShiftState; MousePos: TPoint; var Handled: Boolean);
 begin
-  Dec(Z);
-  Caption := Format('X:%f, Y:%f, Z:%f', [X / 10, Y / 10, Z / 10]);
+  Z := Z * 1.1;
+  ;
+  ShowTrans;
 end;
 
 procedure TForm1.FormMouseWheelUp(Sender: TObject; Shift: TShiftState; MousePos: TPoint; var Handled: Boolean);
 begin
-  Inc(Z);
-  Caption := Format('X:%f, Y:%f, Z:%f', [X / 10, Y / 10, Z / 10]);
+  Z := Z / 1.1;
+  ShowTrans;
 end;
 
 procedure TForm1.FormResize(Sender: TObject);
@@ -124,6 +135,11 @@ begin
 
   glMatrixMode(GL_MODELVIEW); // 更改模型视图矩阵
   glLoadIdentity; // 设置当前矩阵为单位阵
+end;
+
+procedure TForm1.ShowTrans;
+begin
+  Caption := Format('X:%f, Y:%f, Z:%f', [X, Y, Z]);
 end;
 
 end.
